@@ -2,12 +2,19 @@ package restAssured;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
@@ -132,4 +139,238 @@ public class OlaMundoTest {
         ;
     }
 
+    @Test
+    public void deveSalvarUsuario(){
+        given()
+                .spec(requisicaoPadrao)
+                .contentType("application/json")
+                .body("{ \"name\": \"Thainá\", \"age\": 28 }")
+        .when()
+                .post("/users")
+        .then()
+                .statusCode(201)
+        ;
+    }
+
+    @Test
+    public void deveAlterarUsuario(){
+        given()
+                .spec(requisicaoPadrao)
+                .contentType("application/json")
+                .body("{ \"name\": \"João Silva\"}")
+        .when()
+                .put("/users/1")
+        .then()
+                .spec(respostaPadrao)
+        ;
+    }
+
+    //Serialização(Converte um MAP para JSON)
+    @Test
+    public void deveSalvarUsuarioUsandoMap(){
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("name", "Usuário via Map");
+        params.put("age", 18);
+
+        given()
+                .spec(requisicaoPadrao)
+                .contentType("application/json")
+                .body(params)
+        .when()
+                .post("/users")
+        .then()
+                .statusCode(201)
+                .body("id", is(notNullValue()))
+                .body("name", is("Usuário via Map"))
+                .body("age", is(18))
+        ;
+    }
+
+    //Serialização(Converte um objeto para JSON)
+    @Test
+    public void deveSalvarUsuarioUsandoObjeto(){
+        User user = new User("Usuário via objeto", 25);
+        given()
+                .spec(requisicaoPadrao)
+                .contentType("application/json")
+                .body(user)
+        .when()
+                .post("/users")
+        .then()
+                .statusCode(201)
+                .body("id", is(notNullValue()))
+                .body("name", is("Usuário via objeto"))
+                .body("age", is(25))
+        ;
+    }
+
+    //Desserialização
+    @Test
+    public void deveDesserializarObjetoAoSalvarUsuario(){
+        User user = new User("Usuário desserializado", 55);
+        User usuarioInserido = given()
+                .spec(requisicaoPadrao)
+                .contentType("application/json")
+                .body(user)
+        .when()
+                .post("/users")
+        .then()
+                .statusCode(201)
+                .extract().body().as(User.class)
+        ;
+
+        Assertions.assertEquals("Usuário desserializado", usuarioInserido.getName());
+        assertThat(usuarioInserido.getAge(), is(55));
+    }
+
+    //Query
+    @Test
+    public void deveEnviarValorViaQuery(){
+        given()
+        .when()
+                .get("https://restapi.wcaquino.me/v2/users?format=json")
+        .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+        ;
+    }
+
+    @Test
+    public void deveEnviarValorViaQueryParam(){
+        given()
+                .queryParam("format", "json")
+        .when()
+                .get("https://restapi.wcaquino.me/v2/users")
+        .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+        ;
+    }
+
+    //Header
+    @Test
+    public void deveEnviarValorViaHeader(){
+        given()
+                .accept(ContentType.JSON)
+        .when()
+                .get("https://restapi.wcaquino.me/v2/users")
+        .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+        ;
+    }
+
+    //Upload
+    @Test
+    public void deveFazerUploadArquivo(){
+        given()
+                .multiPart("arquivo", new File("src/main/img.png"))
+        .when()
+                .get("https://restapi.wcaquino.me/v2/users")
+        .then()
+                .statusCode(200)
+
+        ;
+    }
+
+    @Test
+    public void naoDeveFazerUploadArquivoAcimaDeUmSegundo(){
+        given()
+                .multiPart("arquivo", new File("src/main/img.png"))
+        .when()
+                .post("https://restapi.wcaquino.me/v2/upload")
+        .then()
+                .time(lessThan(1000L))
+                .statusCode(200)
+        ;
+    }
+
+    //Acessando API pública
+    @Test
+    public void deveAcessarSWAPI(){
+        given()
+        .when()
+                .get("https://swapi.dev/api/people/1")
+        .then()
+                .statusCode(200)
+                .body("name", is("Luke Skywalker"))
+        ;
+    }
+
+    //Acessando API com chave(chave: 5a560e3737d45063db32a63c6eceab71)
+    /*@Test
+    public void deveObterClima(){
+        given()
+                .queryParam("q", "Fortaleza")
+                .queryParam("appid", "5a560e3737d45063db32a63c6eceab71")
+        .when()
+                .get("https://api.openweathermap.org/data/2.5/weather")
+        .then()
+                .statusCode(200)
+                .body("name", is("Fortaleza"))
+        ;
+    }*/
+
+    //Autenticação básica
+    @Test
+    public void naoDeveAcessarSemSenha(){
+        given()
+        .when()
+                .get("https://restapi.wcaquino.me/basicauth")
+        .then()
+                .statusCode(401)
+        ;
+    }
+
+    @Test
+    public void deveFazerAutenticacaoBasica(){
+        given()
+        .when()
+                .get("https://admin:senha@restapi.wcaquino.me/basicauth")
+        .then()
+                .statusCode(200)
+                .body("status", is("logado"))
+        ;
+    }
+
+    @Test
+    public void deveFazerAutenticacaoBasica2(){
+        given()
+                .auth().basic("admin", "senha")
+        .when()
+                .get("https://restapi.wcaquino.me/basicauth")
+        .then()
+                .statusCode(200)
+                .body("status", is("logado"))
+        ;
+    }
+
+    //Autenticação com token JWT
+    @Test
+    public void deveFazerAutenticacaoTokenJWT(){
+        Map<String, Object> login = new HashMap<String, Object>();
+        login.put("email", "thaina@teste.com");
+        login.put("senha", "teste123");
+
+        //Faz login na API e extrai o token
+        String token = given()
+                .body(login)
+                .contentType(ContentType.JSON)
+        .when()
+                .post("https://barrigarest.wcaquino.me/signin")
+        .then()
+                .statusCode(200)
+                .extract().path("token")
+        ;
+
+        //Obtém as contas
+        given()
+                .header("Authorization", "JWT " + token)
+        .when()
+                .get("https://barrigarest.wcaquino.me/contas")
+        .then()
+                .statusCode(200)
+                .body("nome", hasItem("conta teste"))
+        ;
+    }
 }

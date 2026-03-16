@@ -264,7 +264,7 @@ public class OlaMundoTest {
     @Test
     public void deveFazerUploadArquivo(){
         given()
-                .multiPart("arquivo", new File("src/main/img.png"))
+                .multiPart("arquivo", new File("src/main/java/restAssured/img.png"))
         .when()
                 .get("https://restapi.wcaquino.me/v2/users")
         .then()

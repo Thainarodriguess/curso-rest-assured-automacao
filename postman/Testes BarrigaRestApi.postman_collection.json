@@ -1,0 +1,375 @@
+{
+  "info": {
+    "_postman_id": "c8173cef-bfb1-4b67-8a75-163ba0e8d119",
+    "name": "Testes BarrigaRestApi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52910202",
+    "_collection_link": "https://go.postman.co/collection/52910202-c8173cef-bfb1-4b67-8a75-163ba0e8d119?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "[Auxiliar] Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"thaina@teste.com\",\r\n    \"senha\": \"teste123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/signin",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "signin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 001] Não deve acessar API sem token",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/contas",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "contas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 002] Deve incluir conta com sucesso",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"conta de salão\"\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/contas",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "contas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 003] Deve alterar conta com sucesso",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"conta alterada\"\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/contas/2589458",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "contas",
+            "2589458"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 004] Não deve incluir conta com nome repetido",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"Inss\"  \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/contas/2590220",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "contas",
+            "2590220"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 005] Deve inserir movimentação com sucesso",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"conta_id\": 2590226,\r\n    \"descricao\": \"testando\",\r\n    \"envolvido\": \"Thainá\",\r\n    \"tipo\": \"DESP\",\r\n    \"data_transacao\": \"16/03/2026\",\r\n    \"data_pagamento\": \"16/03/2026\",\r\n    \"valor\": 100.00,\r\n    \"status\": true\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/transacoes",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "transacoes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 006] Deve validar campos obrigatórios da movimentação",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"conta_id\": 2590226,\r\n    \"descricao\": \"\",\r\n    \"envolvido\": \"\",\r\n    \"tipo\": \"DESP\",\r\n    \"data_transacao\": \"\",\r\n    \"data_pagamento\": \"\",\r\n    \"valor\": 100.00,\r\n    \"status\": true\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/transacoes",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "transacoes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 007] Não deve cadastrar movimentação com data futura",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"conta_id\": 2590226,\r\n    \"descricao\": \"testando\",\r\n    \"envolvido\": \"Thainá\",\r\n    \"tipo\": \"DESP\",\r\n    \"data_transacao\": \"16/06/2026\",\r\n    \"data_pagamento\": \"16/06/2026\",\r\n    \"valor\": 100.00,\r\n    \"status\": true\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/transacoes",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "transacoes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 008] Não deve remover conta com movimentação",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/contas/2590226",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "contas",
+            "2590226"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CT - 010] Deve remover movimentação",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Njc5Mzl9.3F2RbckmJqKU308sjiMZhzH6XAqflveKDUoqjugPhAk",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "https://barrigarest.wcaquino.me/transacoes/2426910",
+          "protocol": "https",
+          "host": [
+            "barrigarest",
+            "wcaquino",
+            "me"
+          ],
+          "path": [
+            "transacoes",
+            "2426910"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

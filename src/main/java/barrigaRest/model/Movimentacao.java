@@ -1,4 +1,4 @@
-package barrigaRest;
+package barrigaRest.model;
 
 public class Movimentacao {
     private Integer conta_id;

@@ -1,4 +1,4 @@
-package barrigaRest;
+package barrigaRest.model;
 
 public class Conta {
     private String nome;
